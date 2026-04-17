@@ -1,0 +1,604 @@
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --primary:#de6538;--primary-light:#e67d4d;--primary-dark:#c5531f;
+    --secondary:#618b49;--secondary-light:#7aa45a;--secondary-dark:#4d7138;
+    --white:#FFFFFF;--light:#F8F9FA;--light2:#F0F2F5;
+    --dark-text:#1A1E14;--muted:#666666;--border:rgba(222,101,56,0.15);
+  }
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--white);color:var(--dark-text);line-height:1.6}
+
+  /* NAV */
+  nav{background:var(--white);border-bottom:2px solid var(--primary);padding:0.75rem 2rem;display:flex;align-items:center;justify-content:space-between;height:80px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+  .logo{display:flex;align-items:center;gap:12px;font-size:22px;font-weight:600;color:var(--dark-text);letter-spacing:1px}
+  .logo img{height:50px;width:auto}
+  .logo span{color:var(--secondary);font-weight:600;margin-left:8px}
+  .nav-links{display:flex;gap:2.5rem;list-style:none}
+  .nav-links a{color:var(--dark-text);text-decoration:none;font-size:14px;font-weight:500;transition:color 0.2s}
+  .nav-links a:hover,.nav-links a.active{color:var(--primary)}
+  .nav-cta{background:var(--primary);color:var(--white);padding:10px 22px;border-radius:4px;font-size:13px;font-weight:600;text-decoration:none;transition:background 0.2s}
+  .nav-cta:hover{background:var(--primary-dark)}
+
+  /* PAGE TABS */
+  .pages{display:none;gap:0;background:var(--light2);border-bottom:1px solid var(--border);overflow-x:auto}
+  .page-tab{padding:10px 20px;font-size:12px;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.2s}
+  .page-tab.active{color:var(--primary);border-bottom-color:var(--primary);background:rgba(222,101,56,0.05)}
+  .page-tab:hover{color:var(--dark-text)}
+
+  /* PAGES */
+  .page{display:none}.page.active{display:block}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#FFFFFF 0%,#F8F9FA 40%,#F5F7FA 100%);padding:5rem 2rem 4rem;text-align:center;position:relative;border-bottom:1px solid var(--border)}
+  .hero-badge{display:inline-block;background:rgba(222,101,56,0.12);color:var(--primary-dark);border:1px solid var(--border);padding:6px 16px;border-radius:20px;font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:1.5rem}
+  .hero h1{font-size:clamp(28px,5vw,52px);font-weight:600;line-height:1.2;max-width:720px;margin:0 auto 1.2rem;color:var(--dark-text)}
+  .hero h1 em{color:var(--primary);font-style:normal}
+  .hero p{font-size:17px;color:var(--muted);max-width:560px;margin:0 auto 2.5rem}
+  .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+  .btn-primary{background:var(--primary);color:var(--white);padding:14px 28px;border-radius:4px;font-size:15px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background 0.2s}
+  .btn-primary:hover{background:var(--primary-dark)}
+  .btn-wa{background:#618b49;color:#fff;padding:14px 28px;border-radius:4px;font-size:15px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background 0.2s}
+  .btn-wa:hover{background:#4d7138}
+  .btn-outline{border:2px solid var(--primary);color:var(--primary);padding:12px 24px;border-radius:4px;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.2s}
+  .btn-outline:hover{border-color:var(--primary-dark);color:var(--primary-dark);background:rgba(222,101,56,0.05)}
+  .hero-stats{display:flex;justify-content:center;gap:3rem;margin-top:3.5rem;padding-top:2.5rem;border-top:1px solid var(--border);flex-wrap:wrap}
+  .stat{text-align:center}
+  .stat-num{font-size:32px;font-weight:600;color:var(--primary)}
+  .stat-lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+  
+  /* SILO VISUAL */
+  .silo-visual{margin:2.5rem auto 0;max-width:600px;position:relative}
+  .silo-img{width:100%;height:220px;background:linear-gradient(180deg,#F0F2F5 0%,#E8EAED 100%);border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+  .silo-svg-wrap{opacity:0.9}
+
+  /* SECTION */
+  section{padding:4rem 2rem;max-width:1100px;margin:0 auto}
+  .section-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--primary);margin-bottom:0.5rem}
+  .section-title{font-size:clamp(22px,3.5vw,34px);font-weight:600;color:var(--dark-text);margin-bottom:0.75rem}
+  .section-sub{font-size:16px;color:var(--muted);max-width:560px}
+  .section-divider{border:none;border-top:1px solid var(--border);margin:0}
+
+  /* SERVICES GRID */
+  .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:2.5rem}
+  .service-card{background:var(--white);padding:1.75rem;transition:background 0.2s,transform 0.2s;border:1px solid var(--light2)}
+  .service-card:hover{background:var(--light);transform:translateY(-2px)}
+  .service-icon{width:40px;height:40px;background:rgba(222,101,56,0.1);border-radius:6px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+  .service-card h3{font-size:16px;font-weight:600;color:var(--dark-text);margin-bottom:0.5rem}
+  .service-card p{font-size:13px;color:var(--muted);line-height:1.6}
+
+  /* WHY US */
+  .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-top:2.5rem}
+  .why-item{display:flex;gap:1rem;align-items:flex-start}
+  .why-num{font-size:32px;font-weight:600;color:var(--primary);opacity:0.3;line-height:1;min-width:40px}
+  .why-item h4{font-size:15px;font-weight:600;color:var(--dark-text);margin-bottom:0.3rem}
+  .why-item p{font-size:13px;color:var(--muted)}
+
+  /* TRUST BAR */
+  .trust-bar{background:var(--light2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2rem}
+  .trust-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;justify-content:space-between}
+  .trust-item{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px}
+  .trust-dot{width:8px;height:8px;background:var(--primary);border-radius:50%;flex-shrink:0}
+
+  /* PRODUCTS */
+  .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:2.5rem}
+  .product-card{background:var(--white);border:1px solid var(--light2);border-radius:8px;overflow:hidden;transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s}
+  .product-card:hover{border-color:var(--primary);transform:translateY(-4px);box-shadow:0 8px 20px rgba(222,101,56,0.12)}
+  .product-img{height:160px;background:linear-gradient(135deg,#F8F9FA,#F0F2F5);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+  .product-img img{width:100%;height:100%;object-fit:cover}
+  .product-badge{position:absolute;top:10px;left:10px;background:rgba(222,101,56,0.95);color:var(--white);font-size:10px;padding:3px 10px;border-radius:3px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase}
+  .product-body{padding:1.25rem}
+  .product-body h3{font-size:16px;font-weight:600;color:var(--dark-text);margin-bottom:0.5rem}
+  .product-body p{font-size:13px;color:var(--muted);margin-bottom:1rem;line-height:1.5}
+  .specs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.2rem}
+  .spec-tag{background:rgba(222,101,56,0.1);color:var(--primary-dark);font-size:11px;padding:3px 9px;border-radius:3px;border:1px solid rgba(222,101,56,0.2)}
+  .product-actions{display:flex;gap:8px}
+  .btn-sm{padding:8px 14px;border-radius:4px;font-size:12px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:5px;cursor:pointer;border:none}
+  .btn-sm-gold{background:var(--primary);color:var(--white)}
+  .btn-sm-wa{background:#618b49;color:#fff}
+  .btn-sm-gold:hover{background:var(--primary-dark)}
+  .btn-sm-wa:hover{background:#4d7138}
+
+  /* ABOUT */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;margin-top:2.5rem}
+  @media(max-width:650px){.about-grid{grid-template-columns:1fr}}
+  .about-img{background:linear-gradient(135deg,#F8F9FA,#F0F2F5);border:1px solid var(--border);border-radius:8px;height:340px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .about-img img{width:100%;height:100%;object-fit:cover}
+  .about-text h2{font-size:26px;font-weight:600;margin-bottom:1rem;color:var(--dark-text)}
+  .about-text p{font-size:14px;color:var(--muted);margin-bottom:1rem;line-height:1.7}
+  .regions{display:flex;flex-wrap:wrap;gap:8px;margin-top:1.5rem}
+  .region-tag{background:var(--light2);border:1px solid var(--border);color:var(--muted);font-size:12px;padding:4px 12px;border-radius:20px}
+
+  /* CONTACT */
+  .contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:2.5rem;margin-top:2.5rem}
+  @media(max-width:650px){.contact-grid{grid-template-columns:1fr}}
+  .contact-info{display:flex;flex-direction:column;gap:1.5rem}
+  .contact-item{display:flex;gap:1rem;align-items:flex-start}
+  .contact-icon{width:40px;height:40px;background:rgba(222,101,56,0.1);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .contact-item h4{font-size:13px;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;font-weight:600}
+  .contact-item p,.contact-item a{font-size:14px;color:var(--muted);text-decoration:none}
+  .contact-item a:hover{color:var(--primary)}
+  .contact-form{background:var(--light2);border:1px solid var(--border);border-radius:8px;padding:1.75rem}
+  .form-row{margin-bottom:1rem}
+  .form-row label{display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;font-weight:600}
+  .form-row input,.form-row textarea,.form-row select{width:100%;background:var(--white);border:1px solid var(--border);border-radius:4px;padding:10px 14px;color:var(--dark-text);font-size:14px;outline:none;transition:border-color 0.2s;font-family:inherit}
+  .form-row input:focus,.form-row textarea:focus,.form-row select:focus{border-color:var(--primary)}
+  .form-row textarea{height:100px;resize:vertical}
+  .form-2col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media(max-width:480px){.form-2col{grid-template-columns:1fr}}
+
+  /* WHATSAPP FLOAT */
+  .wa-float{position:fixed;bottom:24px;right:24px;z-index:999}
+  .wa-float-btn{width:56px;height:56px;background:#618b49;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(97,139,73,0.3);cursor:pointer;transition:transform 0.2s}
+  .wa-float-btn:hover{transform:scale(1.1)}
+  .wa-float-popup{position:absolute;bottom:68px;right:0;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:1rem;width:260px;display:none;box-shadow:0 4px 16px rgba(0,0,0,0.12)}
+  .wa-float-popup.open{display:block}
+  .wa-popup-title{font-size:13px;font-weight:600;color:var(--dark-text);margin-bottom:0.75rem}
+  .wa-msg-btn{display:block;width:100%;background:rgba(97,139,73,0.08);border:1px solid rgba(97,139,73,0.2);color:#618b49;border-radius:4px;padding:8px 12px;font-size:12px;text-align:left;cursor:pointer;margin-bottom:6px;transition:background 0.2s}
+  .wa-msg-btn:hover{background:rgba(97,139,73,0.15)}
+
+  /* FOOTER */
+  footer{background:var(--dark-text);border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center}
+  footer p{font-size:13px;color:#999}
+  footer .foot-links{display:flex;gap:1.5rem;justify-content:center;margin-bottom:1rem;flex-wrap:wrap}
+  footer .foot-links a{font-size:13px;color:#999;text-decoration:none}
+  footer .foot-links a:hover{color:var(--primary)}
+
+  @media(max-width:600px){
+    .hero-stats{gap:1.5rem}
+    nav{padding:0.5rem 1rem;height:70px}
+    .nav-links{display:none}
+    .logo span{display:none}
+    section{padding:3rem 1rem}
+  }
+</style>
+
+<nav>
+  <div class="logo">
+    <img src="logo.png" alt="AgriSilo Logo">
+    <span>AGRISILO</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#" class="active" onclick="showPage('home',this);return false">Home</a></li>
+    <li><a href="#" onclick="showPage('products',this);return false">Products</a></li>
+    <li><a href="#" onclick="showPage('about',this);return false">About</a></li>
+    <li><a href="#" onclick="showPage('contact',this);return false">Contact</a></li>
+  </ul>
+  <a href="#" class="nav-cta" onclick="showPage('contact',null);return false">Request Quote</a>
+</nav>
+
+<div class="pages">
+  <div class="page-tab active" onclick="showPage('home',null)">Home</div>
+  <div class="page-tab" onclick="showPage('products',null)">Products & Solutions</div>
+  <div class="page-tab" onclick="showPage('about',null)">About Us</div>
+  <div class="page-tab" onclick="showPage('contact',null)">Contact</div>
+</div>
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-badge">Southern Africa's Grain Storage Specialists</div>
+    <h1>Engineering <em>Reliable Grain Storage</em> Across Africa</h1>
+    <p>30 years of proven expertise in silo installation, grain conveying systems, and agricultural infrastructure — built to last.</p>
+    <div class="hero-btns">
+      <a href="#" class="btn-primary" onclick="showPage('contact',null);return false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        Request a Quote
+      </a>
+      <a href="https://wa.me/27842683332?text=Hi%2C+I+would+like+a+quote+from+Agrisilo." class="btn-wa" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp Us
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">30+</div><div class="stat-lbl">Years Experience</div></div>
+      <div class="stat"><div class="stat-num">7</div><div class="stat-lbl">Countries Served</div></div>
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-lbl">Silos Installed</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-lbl">Aftersales Support</div></div>
+    </div>
+  </div>
+
+  <div class="trust-bar">
+    <div class="trust-inner">
+      <div class="trust-item"><div class="trust-dot"></div> South Africa</div>
+      <div class="trust-item"><div class="trust-dot"></div> Botswana</div>
+      <div class="trust-item"><div class="trust-dot"></div> Mozambique</div>
+      <div class="trust-item"><div class="trust-dot"></div> Zimbabwe</div>
+      <div class="trust-item"><div class="trust-dot"></div> Namibia</div>
+      <div class="trust-item"><div class="trust-dot"></div> Lesotho</div>
+      <div class="trust-item"><div class="trust-dot"></div> Swaziland</div>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-label">What we do</div>
+    <div class="section-title">Complete Grain Storage & Handling Solutions</div>
+    <div class="section-sub">From design and supply to installation and long-term maintenance — we handle every stage of your grain infrastructure project.</div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#de6538" stroke-width="1.5"><rect x="3" y="8" width="18" height="13" rx="1"/><path d="M3 8l9-5 9 5"/><line x1="12" y1="8" x2="12" y2="21"/></svg>
+        </div>
+        <h3>Flat Bottom Silos</h3>
+        <p>High-capacity long-term grain storage engineered for durability and efficient management of large volumes.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#de6538" stroke-width="1.5"><polygon points="12 2 22 8 22 16 12 22 2 16 2 8"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+        </div>
+        <h3>Commercial Hopper Silos</h3>
+        <p>Ideal for continuous loading/unloading operations, collation and pre-drying classification workflows.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#de6538" stroke-width="1.5"><path d="M4 4h16v4L12 16 4 8V4z"/><line x1="12" y1="16" x2="12" y2="20"/><line x1="8" y1="20" x2="16" y2="20"/></svg>
+        </div>
+        <h3>Grain Handling Systems</h3>
+        <p>Bucket elevators, conveyors, sweep augers, grain cleaning and dust collection — complete turnkey systems.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#de6538" stroke-width="1.5"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <h3>Maintenance Services</h3>
+        <p>Pre-season servicing, bearing maintenance, aeration systems, conveyor alignment — locally and across borders.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section>
+    <div class="section-label">Why Agrisilo</div>
+    <div class="section-title">The Trusted Choice for Serious Operations</div>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-num">01</div>
+        <div><h4>30 Years in the Field</h4><p>Deep industry knowledge earned from hundreds of real-world projects across Southern Africa.</p></div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">02</div>
+        <div><h4>End-to-End Delivery</h4><p>We design, supply, install and maintain — one reliable partner from concept to commissioning.</p></div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">03</div>
+        <div><h4>Cross-Border Capability</h4><p>Active operations in 7 African countries with the experience to navigate cross-border logistics.</p></div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">04</div>
+        <div><h4>Premium Equipment</h4><p>Import and supply of internationally proven grain storage and conveying equipment built for longevity.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section style="text-align:center;padding-bottom:4rem">
+    <div class="section-label">Get started today</div>
+    <div class="section-title" style="margin:0 auto 0.75rem">Ready to Build Your Storage Solution?</div>
+    <p style="color:var(--muted);max-width:480px;margin:0 auto 2rem;font-size:15px">Tell us about your project and we'll respond within one business day with expert guidance and pricing.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="#" class="btn-primary" onclick="showPage('contact',null);return false">Request a Quote</a>
+      <a href="https://wa.me/27842683332?text=Hi%2C+I+would+like+to+discuss+a+grain+storage+project+with+Agrisilo." class="btn-wa" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp Us
+      </a>
+    </div>
+  </section>
+</div>
+
+<!-- PRODUCTS PAGE -->
+<div id="page-products" class="page">
+  <div class="hero" style="padding:3rem 2rem 2.5rem">
+    <div class="hero-badge">Products & Solutions</div>
+    <h1>Grain Storage & <em>Handling Systems</em></h1>
+    <p>Premium-grade equipment imported and installed across Southern Africa. Request a quote on any product in under 30 seconds.</p>
+  </div>
+  <section>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-img">
+          <div class="product-badge">Most Popular</div>
+          <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=500&h=400&fit=crop" alt="Flat Bottom Silos">
+        </div>
+        <div class="product-body">
+          <h3>Flat Bottom Silos</h3>
+          <p>Heavy-duty long-term grain storage silos engineered for high-capacity operations and efficient inventory management.</p>
+          <div class="specs">
+            <span class="spec-tag">High Capacity</span>
+            <span class="spec-tag">Long-term Storage</span>
+            <span class="spec-tag">Aeration Ready</span>
+          </div>
+          <div class="product-actions">
+            <a href="#" class="btn-sm btn-sm-gold" onclick="showPage('contact',null);return false">Request Quote</a>
+            <a href="https://wa.me/27842683332?text=Hi%2C+I'm+interested+in+Flat+Bottom+Silos.+Can+you+send+pricing+and+details%3F" class="btn-sm btn-sm-wa" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=500&h=400&fit=crop" alt="Commercial Hopper Silos">
+        </div>
+        <div class="product-body">
+          <h3>Commercial Hopper Silos</h3>
+          <p>Designed for continuous loading and unloading operations with pre-drying collation and classification functionality.</p>
+          <div class="specs">
+            <span class="spec-tag">Continuous Flow</span>
+            <span class="spec-tag">Pre-drying Ready</span>
+            <span class="spec-tag">Commercial Grade</span>
+          </div>
+          <div class="product-actions">
+            <a href="#" class="btn-sm btn-sm-gold" onclick="showPage('contact',null);return false">Request Quote</a>
+            <a href="https://wa.me/27842683332?text=Hi%2C+I'm+interested+in+Commercial+Hopper+Silos.+Can+you+send+pricing+and+details%3F" class="btn-sm btn-sm-wa" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1623633521074-e17dc5c3f2f2?w=500&h=400&fit=crop" alt="Grain Handling Systems">
+        </div>
+        <div class="product-body">
+          <h3>Grain Handling Systems</h3>
+          <p>Complete handling solutions: bucket elevators, belt/chain/tube conveyors, sweep augers, cleaning and dust collection.</p>
+          <div class="specs">
+            <span class="spec-tag">Bucket Elevators</span>
+            <span class="spec-tag">Conveyors</span>
+            <span class="spec-tag">Dust Control</span>
+          </div>
+          <div class="product-actions">
+            <a href="#" class="btn-sm btn-sm-gold" onclick="showPage('contact',null);return false">Request Quote</a>
+            <a href="https://wa.me/27842683332?text=Hi%2C+I'm+interested+in+Grain+Handling+Systems.+Can+you+send+pricing+and+details%3F" class="btn-sm btn-sm-wa" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">
+          <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&h=400&fit=crop" alt="Maintenance Services">
+        </div>
+        <div class="product-body">
+          <h3>Maintenance Services</h3>
+          <p>Scheduled and reactive maintenance: elevator tensioning, bearing service, aeration floor cleaning, pre-season alignment.</p>
+          <div class="specs">
+            <span class="spec-tag">On-site Service</span>
+            <span class="spec-tag">Cross-border</span>
+            <span class="spec-tag">Pre-season</span>
+          </div>
+          <div class="product-actions">
+            <a href="#" class="btn-sm btn-sm-gold" onclick="showPage('contact',null);return false">Request Quote</a>
+            <a href="https://wa.me/27842683332?text=Hi%2C+I+need+maintenance+services+for+my+grain+storage+equipment.+Can+we+discuss%3F" class="btn-sm btn-sm-wa" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--light2);border:1px solid var(--border);border-radius:8px;padding:2rem;margin-top:3rem;text-align:center">
+      <div style="font-size:13px;color:var(--primary);letter-spacing:1px;text-transform:uppercase;margin-bottom:0.5rem">Need a custom solution?</div>
+      <div style="font-size:20px;font-weight:500;margin-bottom:0.5rem;color:var(--text)">Not sure which product fits your operation?</div>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:1.5rem">Our engineers will assess your site, capacity and budget and recommend the right system.</p>
+      <a href="https://wa.me/27842683332?text=Hi%2C+I+need+help+choosing+the+right+grain+storage+solution+for+my+operation." class="btn-wa" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Chat with an Expert
+      </a>
+    </div>
+  </section>
+</div>
+
+<!-- ABOUT PAGE -->
+<div id="page-about" class="page">
+  <div class="hero" style="padding:3rem 2rem 2.5rem">
+    <div class="hero-badge">Our Story</div>
+    <h1>Built on <em>30 Years</em> of Grain Storage Expertise</h1>
+    <p>From Deneysville to 7 African nations — Agrisilo has been engineering reliable grain infrastructure since the 1990s.</p>
+  </div>
+  <section>
+    <div class="about-grid">
+      <div class="about-img">
+        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad576?w=500&h=600&fit=crop" alt="AgriSilo Operations">
+      </div>
+      <div class="about-text">
+        <h2>Africa's Grain Storage Partner</h2>
+        <p>Agrisilo is a well-established silo company specialising in the import, installation and maintenance of grain storage and conveying systems. Underpinned by 30 years of hands-on industry experience, we combine deep technical knowledge with a practical understanding of agricultural infrastructure across Southern Africa.</p>
+        <p>Today, Agrisilo is a young, innovative, and continuously growing company — recognised as an expert and leader within the grain storage sector. Through consistent performance and a commitment to sustainable growth, we continue to strengthen our position across the continent.</p>
+        <p>Headquartered in Deneysville, Free State, South Africa, our teams operate across borders to deliver projects on time and to specification.</p>
+        <div style="background:rgba(222,101,56,0.08);border-left:3px solid var(--primary);padding:1rem 1.2rem;border-radius:0 4px 4px 0;margin:1.5rem 0">
+          <p style="color:var(--primary);font-size:15px;font-weight:500;margin:0">"We build, we maintain, you benefit."</p>
+        </div>
+        <div class="regions">
+          <span class="region-tag">South Africa</span>
+          <span class="region-tag">Botswana</span>
+          <span class="region-tag">Mozambique</span>
+          <span class="region-tag">Zimbabwe</span>
+          <span class="region-tag">Namibia</span>
+          <span class="region-tag">Lesotho</span>
+          <span class="region-tag">Swaziland</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <section>
+    <div class="section-label">Experience & Trust</div>
+    <div class="section-title">Why Leading Operations Choose Agrisilo</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-top:2rem">
+      <div style="background:var(--light2);padding:2rem;text-align:center">
+        <div style="font-size:42px;font-weight:600;color:var(--primary)">30+</div>
+        <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px">Years of Experience</div>
+      </div>
+      <div style="background:var(--light2);padding:2rem;text-align:center">
+        <div style="font-size:42px;font-weight:600;color:var(--primary)">7</div>
+        <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px">African Countries</div>
+      </div>
+      <div style="background:var(--light2);padding:2rem;text-align:center">
+        <div style="font-size:42px;font-weight:600;color:var(--primary)">500+</div>
+        <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px">Silos Installed</div>
+      </div>
+      <div style="background:var(--light2);padding:2rem;text-align:center">
+        <div style="font-size:42px;font-weight:600;color:var(--primary)">100%</div>
+        <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px">Aftersales Support</div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-bottom:4rem;text-align:center">
+    <div class="section-title">Ready to work with us?</div>
+    <p style="color:var(--muted);margin-bottom:2rem;max-width:420px;margin-left:auto;margin-right:auto;font-size:14px">Let's discuss your grain storage project. We respond within one business day.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="#" class="btn-primary" onclick="showPage('contact',null);return false">Get in Touch</a>
+      <a href="tel:+27842683332" class="btn-outline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.72a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .84h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+        +27 84 268 3332
+      </a>
+    </div>
+  </section>
+</div>
+
+<!-- CONTACT PAGE -->
+<div id="page-contact" class="page">
+  <div class="hero" style="padding:3rem 2rem 2.5rem">
+    <div class="hero-badge">Get in Touch</div>
+    <h1>Let's Discuss Your <em>Next Project</em></h1>
+    <p>Request a quote, ask a technical question, or simply start a conversation. We respond fast.</p>
+    <div class="hero-btns" style="margin-top:1.5rem">
+      <a href="https://wa.me/27842683332?text=Hi%2C+I+would+like+a+quote+from+Agrisilo." class="btn-wa" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp Now — Fastest Response
+      </a>
+      <a href="tel:+27842683332" class="btn-outline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.72a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .84h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+        Call Us Now
+      </a>
+    </div>
+  </div>
+
+  <section>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#de6538" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <h4>Office Address</h4>
+            <p>8 Main Street, Deneysville<br>Free State, South Africa</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#de6538" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.72a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .84h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div>
+            <h4>Phone / WhatsApp</h4>
+            <a href="tel:+27842683332">+27 84 268 3332</a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#de6538" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <h4>Email</h4>
+            <a href="mailto:sales@agrisilo.co.za">sales@agrisilo.co.za</a><br>
+            <a href="mailto:sales1@agrisilo.co.za">sales1@agrisilo.co.za</a>
+          </div>
+        </div>
+        <div style="background:rgba(97,139,73,0.07);border:1px solid rgba(97,139,73,0.25);border-radius:8px;padding:1.2rem">
+          <div style="font-size:13px;font-weight:600;color:#618b49;margin-bottom:0.5rem">Fastest way to reach us</div>
+          <p style="font-size:13px;color:var(--muted);margin-bottom:0.75rem">WhatsApp is monitored throughout the day. Click below for an instant connection:</p>
+          <a href="https://wa.me/27842683332?text=Hi%2C+I+would+like+a+quote+from+Agrisilo." class="btn-wa" target="_blank" style="font-size:13px;padding:10px 16px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Open WhatsApp Chat
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <div style="font-size:16px;font-weight:600;color:var(--dark-text);margin-bottom:1.25rem">Send us a message</div>
+        <div class="form-2col">
+          <div class="form-row"><label>First Name</label><input type="text" placeholder="John"></div>
+          <div class="form-row"><label>Last Name</label><input type="text" placeholder="Smith"></div>
+        </div>
+        <div class="form-row"><label>Email Address</label><input type="email" placeholder="john@yourfarm.co.za"></div>
+        <div class="form-row"><label>Phone / WhatsApp</label><input type="tel" placeholder="+27 ..."></div>
+        <div class="form-row">
+          <label>I'm interested in</label>
+          <select>
+            <option>Request a Quote</option>
+            <option>Flat Bottom Silos</option>
+            <option>Commercial Hopper Silos</option>
+            <option>Grain Handling Systems</option>
+            <option>Maintenance Services</option>
+            <option>General Enquiry</option>
+          </select>
+        </div>
+        <div class="form-row"><label>Message</label><textarea placeholder="Tell us about your project — capacity needed, location, timeline..."></textarea></div>
+        <button onclick="alert('Thank you! We will be in touch within 1 business day. For faster response, use WhatsApp.')" style="width:100%;background:var(--primary);color:var(--white);border:none;padding:13px;border-radius:4px;font-size:14px;font-weight:600;cursor:pointer;transition:background 0.2s" onmouseover="this.style.background='#9A6E1A'" onmouseout="this.style.background='#de6538'">Send Message</button>
+        <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:0.75rem">We respond within 1 business day. For immediate help, use WhatsApp.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-links">
+    <a href="#" onclick="showPage('home',null);return false">Home</a>
+    <a href="#" onclick="showPage('products',null);return false">Products</a>
+    <a href="#" onclick="showPage('about',null);return false">About</a>
+    <a href="#" onclick="showPage('contact',null);return false">Contact</a>
+    <a href="mailto:sales@agrisilo.co.za">sales@agrisilo.co.za</a>
+    <a href="tel:+27842683332">+27 84 268 3332</a>
+  </div>
+  <p>© 2026 Agrisilo Developments. Deneysville, Free State, South Africa.</p>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<div class="wa-float">
+  <div class="wa-float-popup" id="waPopup">
+    <div class="wa-popup-title">Chat with Agrisilo</div>
+    <a href="https://wa.me/27842683332?text=Hi%2C+I+would+like+a+quote+from+Agrisilo." class="wa-msg-btn" target="_blank">Request a general quote</a>
+    <a href="https://wa.me/27842683332?text=Hi%2C+I'm+interested+in+Flat+Bottom+Silos.+Can+you+help?" class="wa-msg-btn" target="_blank">Enquire about flat bottom silos</a>
+    <a href="https://wa.me/27842683332?text=Hi%2C+I+need+maintenance+services+for+my+equipment." class="wa-msg-btn" target="_blank">Book maintenance service</a>
+    <a href="https://wa.me/27842683332?text=Hi%2C+I+have+a+general+enquiry+for+Agrisilo." class="wa-msg-btn" target="_blank">General enquiry</a>
+  </div>
+  <div class="wa-float-btn" onclick="toggleWa()">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </div>
+</div>
+
+<script>
+function showPage(id, link) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const tabs = document.querySelectorAll('.page-tab');
+  const order = ['home','products','about','contact'];
+  tabs[order.indexOf(id)].classList.add('active');
+  if(link) link.classList.add('active');
+  document.querySelector('nav').scrollIntoView({behavior:'smooth'});
+}
+function toggleWa() {
+  document.getElementById('waPopup').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const wa = document.querySelector('.wa-float');
+  if (!wa.contains(e.target)) document.getElementById('waPopup').classList.remove('open');
+});
+</script>
